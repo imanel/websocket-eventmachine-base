@@ -1,6 +1,6 @@
 # WebSocket Base for Ruby client and server
 
-WebSocket-EventMachine-Base is base gem for [WebSocket-EventMachineClient](http://github.com/imanel/websocket-eventmachine-client) and [WebSocket-EventMachine-Server](http://github.com/imanel/websocket-eventmachine-server)
+WebSocket-EventMachine-Base is base gem for [WebSocket-EventMachine-Client](http://github.com/imanel/websocket-eventmachine-client) and [WebSocket-EventMachine-Server](http://github.com/imanel/websocket-eventmachine-server)
 
 This gem should not be used directly - please refer to client or server gem for full specification.
 
