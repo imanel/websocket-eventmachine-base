@@ -24,23 +24,23 @@ module WebSocket
       #   error - string with error message
       def onerror(&blk);    @onerror = blk;   end
 
-      # Called when message is received from server.
+      # Called when message is received.
       # Two parameters passed to block:
-      #   message - string with message sent to server
+      #   message - string with received message
       #   type - type of message. Valid values are :text and :binary
       def onmessage(&blk);  @onmessage = blk; end
 
-      # Called when ping message is received from server.
+      # Called when ping message is received
       # One parameter passed to block:
       #   message - string with ping message
       def onping(&blk);     @onping = blk;    end
 
-      # Called when pond message is received from server.
+      # Called when pond message is received
       # One parameter passed to block:
       #   message - string with pong message
       def onpong(&blk);     @onpong = blk;    end
 
-      # Send data to server
+      # Send data
       # @param data [String] Data to send
       # @param args [Hash] Arguments for send
       # @option args [String] :type Type of frame to send - available types are "text", "binary", "ping", "pong" and "close"
@@ -64,7 +64,7 @@ module WebSocket
       end
 
       # Close connection
-      # @return [Boolean] true if connection is closed immediately, false if waiting for server to close connection
+      # @return [Boolean] true if connection is closed immediately, false if waiting for other side to close connection
       def close(code = 1000, data = nil)
         if @state == :open
           @state = :closing
@@ -77,13 +77,13 @@ module WebSocket
         true
       end
 
-      # Send ping message to server
+      # Send ping message
       # @return [Boolean] false if protocol version is not supporting ping requests
       def ping(data = '')
         send(data, :type => :ping)
       end
 
-      # Send pong message to server
+      # Send pong message
       # @return [Boolean] false if protocol version is not supporting pong requests
       def pong(data = '')
         send(data, :type => :pong)
