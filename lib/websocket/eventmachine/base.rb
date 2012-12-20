@@ -157,29 +157,35 @@ module WebSocket
       def handle_open(data)
         @frame << data
         while frame = @frame.next
-          case frame.type
-          when :close
-            @state = :closing
-            close
-            trigger_onclose(frame.to_s)
-          when :ping
-            pong(frame.to_s)
-            trigger_onping(frame.to_s)
-          when :pong
-            trigger_onpong(frame.to_s)
-          when :text
-            trigger_onmessage(frame.to_s, :text)
-          when :binary
-            trigger_onmessage(frame.to_s, :binary)
+          if @state == :open
+            case frame.type
+            when :close
+              @state = :closing
+              close
+              trigger_onclose(frame.to_s)
+            when :ping
+              pong(frame.to_s)
+              trigger_onping(frame.to_s)
+            when :pong
+              trigger_onpong(frame.to_s)
+            when :text
+              trigger_onmessage(frame.to_s, :text)
+            when :binary
+              trigger_onmessage(frame.to_s, :binary)
+            end
+          else
+            break
           end
         end
         unbind if @frame.error?
       end
 
       def handle_closing(data)
-        @state = :closed
-        close
-        trigger_onclose
+        unless @state == :closed
+          @state = :closed
+          close
+          trigger_onclose('')
+        end
       end
 
       def debug(description, data)
