@@ -48,6 +48,7 @@ module WebSocket
       # @return [Boolean] true if data was send, otherwise call on_error if needed
       def send(data, args = {})
         type = args[:type] || :text
+        return if @state == :closed || (@state == :closing && type != :close)
         unless type == :plain
           frame = outgoing_frame.new(:version => @handshake.version, :data => data, :type => type.to_s, :code => args[:code])
           if !frame.supported?
