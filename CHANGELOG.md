@@ -1,6 +1,6 @@
 # Changelog
 
-## Edge
+## 1.0.2
 
 - fix bug that raised error about mismatch EventMachine constant
 
