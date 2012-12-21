@@ -1,5 +1,9 @@
 # Changelog
 
+## Edge
+
+- fix bug that raised error about mismatch EventMachine constant
+
 ## 1.0.1
 
 - prevent sending messages after connection was closed

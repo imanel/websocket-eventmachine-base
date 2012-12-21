@@ -2,10 +2,19 @@ require 'websocket'
 require 'eventmachine'
 
 module WebSocket
+
+  # Duplicate EventMachine constant with silenced warnings.
+  begin
+    old_verbose, $VERBOSE = $VERBOSE, nil
+    EventMachine = ::EventMachine.dup
+  ensure
+    $VERBOSE = old_verbose
+  end
+
   module EventMachine
 
     # WebSocket Base for Client and Server (using EventMachine)
-    class Base < ::EventMachine::Connection
+    class Base < Connection
 
       ###########
       ### API ###
