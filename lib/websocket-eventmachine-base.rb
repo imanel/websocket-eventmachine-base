@@ -1,1 +1,1 @@
-require File.expand_path('../websocket/eventmachine/base', __FILE__)
+require 'websocket/eventmachine/base'
