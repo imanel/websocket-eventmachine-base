@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+- return proper close codes
+
 ## 1.0.2
 
 - fix bug that raised error about mismatch EventMachine constant

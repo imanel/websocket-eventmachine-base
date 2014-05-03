@@ -186,7 +186,16 @@ module WebSocket
             break
           end
         end
-        unbind if @frame.error?
+        handle_error(@frame.error) if @frame.error?
+      end
+
+      def handle_error(error)
+        error_code = case error
+          when :invalid_payload_encoding then 1007
+          else 1002
+        end
+        close(error_code)
+        unbind
       end
 
       def handle_closing(data)
