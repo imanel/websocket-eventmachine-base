@@ -1,6 +1,6 @@
 # Changelog
 
-## Edge
+## 1.1.0
 
 - return status code and message instead of just message in on_close callback (@Sumo-MBryant)
 - you can now pass custom headers for client handshake (@Sumo-MBryant)
