@@ -25,7 +25,9 @@ module WebSocket
       def onopen(&blk);     @onopen = blk;    end
 
       # Called when connection is closed.
-      # No parameters are passed to block
+      # Two parameters are passed to block:
+      #   code - status code
+      #   reason - optional reason for closure
       def onclose(&blk);    @onclose = blk;   end
 
       # Called when error occurs.
@@ -120,7 +122,7 @@ module WebSocket
         unless @state == :closed
           @state = :closed
           close
-          trigger_onclose('')
+          trigger_onclose(1002, '')
         end
       end
 
@@ -137,10 +139,17 @@ module WebSocket
         end
       end
 
-      ['onerror', 'onping', 'onpong', 'onclose'].each do |m|
+      ['onerror', 'onping', 'onpong'].each do |m|
         define_method "trigger_#{m}" do |data|
           callback = instance_variable_get("@#{m}")
           callback.call(data) if callback
+        end
+      end
+
+      ['onclose'].each do |m|
+        define_method "trigger_#{m}" do |code, reason|
+          callback = instance_variable_get("@#{m}")
+          callback.call(code, reason) if callback
         end
       end
 
@@ -171,7 +180,7 @@ module WebSocket
             when :close
               @state = :closing
               close
-              trigger_onclose(frame.to_s)
+              trigger_onclose(frame.code, frame.data)
             when :ping
               pong(frame.to_s)
               trigger_onping(frame.to_s)
@@ -202,7 +211,7 @@ module WebSocket
         unless @state == :closed
           @state = :closed
           close
-          trigger_onclose('')
+          trigger_onclose(1000, '')
         end
       end
 
