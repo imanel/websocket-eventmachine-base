@@ -122,7 +122,7 @@ module WebSocket
         unless @state == :closed
           @state = :closed
           close
-          trigger_onclose(1002, '')
+          trigger_onclose(1002, '') unless @state == :connecting
         end
       end
 
