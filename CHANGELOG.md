@@ -1,6 +1,6 @@
 # Changelog
 
-## Edge
+## 1.2.0
 
 - provide handshake in onopen call
 
