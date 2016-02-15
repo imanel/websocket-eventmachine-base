@@ -132,11 +132,16 @@ module WebSocket
 
       private
 
-      ['onopen'].each do |m|
-        define_method "trigger_#{m}" do
-          callback = instance_variable_get("@#{m}")
-          callback.call if callback
-        end
+      def trigger_onopen(handshake)
+        @onopen.call(handshake) if @onopen
+      end
+
+      def trigger_onmessage(data, type)
+        @onmessage.call(data, type) if @onmessage
+      end
+
+      def trigger_onclose(code, reason)
+        @onclose.call(code, reason) if @onclose
       end
 
       ['onerror', 'onping', 'onpong'].each do |m|
@@ -146,17 +151,6 @@ module WebSocket
         end
       end
 
-      ['onclose'].each do |m|
-        define_method "trigger_#{m}" do |code, reason|
-          callback = instance_variable_get("@#{m}")
-          callback.call(code, reason) if callback
-        end
-      end
-
-      def trigger_onmessage(data, type)
-        @onmessage.call(data, type) if @onmessage
-      end
-
       def handle_connecting(data)
         @handshake << data
         return unless @handshake.finished?
@@ -164,7 +158,7 @@ module WebSocket
           send(@handshake.to_s, :type => :plain) if @handshake.should_respond?
           @frame = incoming_frame.new(:version => @handshake.version)
           @state = :open
-          trigger_onopen
+          trigger_onopen(@handshake)
           handle_open(@handshake.leftovers) if @handshake.leftovers
         else
           trigger_onerror(@handshake.error.to_s)

@@ -1,5 +1,9 @@
 # Changelog
 
+## Edge
+
+- provide handshake in onopen call
+
 ## 1.1.1
 
 - don't call onclose if handshake is not finished yet
