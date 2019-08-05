@@ -76,14 +76,19 @@ module WebSocket
       end
 
       # Close connection
+      # if we received code == 1001 it means that the connection with client has gone. We close the socket without sincronitzation with client.
       # @return [Boolean] true if connection is closed immediately, false if waiting for other side to close connection
       def close(code = 1000, data = nil)
-        if @state == :open
-          @state = :closing
-          return false if send(data, :type => :close, :code => code)
-        else
-          send(data, :type => :close) if @state == :closing
+        if code == 1001
           @state = :closed
+        else
+          if @state == :open
+            @state = :closing
+            return false if send(data, :type => :close, :code => code)
+          else
+            send(data, :type => :close) if @state == :closing
+            @state = :closed
+          end
         end
         close_connection_after_writing
         true
